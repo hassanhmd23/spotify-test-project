@@ -2,13 +2,14 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import './App.css';
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import useArtistsSearch from "../hooks/useArtistsSearch";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Artist from "../interfaces/artist";
 
 const App = () => {
 
     const [query, setQuery] = useState('');
     const [offset, setOffset] = useState(0);
+    const navigate = useNavigate();
 
     const {
         artists,
@@ -17,6 +18,9 @@ const App = () => {
     } = useArtistsSearch(query, offset);
 
     useEffect(() => {
+        if (window.localStorage.getItem('token') === null) {
+            navigate('/login');
+        }
         if (window.localStorage.getItem('query') !== undefined) {
             // @ts-ignore
             setQuery(window.localStorage.getItem('query'));
